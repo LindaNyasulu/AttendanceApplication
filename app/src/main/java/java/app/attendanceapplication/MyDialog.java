@@ -79,7 +79,7 @@ public class MyDialog extends DialogFragment {
         Button add = view.findViewById(R.id.add_btn);
 
         cancel.setOnClickListener(v-> dismiss());
-        add.setOnClickListener(v-> {
+        add.setOnClickListener(v->{
             String className = class_edt.getText().toString();
             String courseName  = course_edt.getText().toString();
             listener.onClick(className,courseName);
