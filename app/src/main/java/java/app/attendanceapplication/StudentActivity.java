@@ -41,6 +41,16 @@ public class StudentActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(layoutManager);
         addapter=new StudentAddapter(this,studentItems);
         recyclerView.setAdapter(addapter);
+        addapter.setOnItemClickListener(position1 ->changeStatus(position));
+    }
+
+    private void changeStatus(int position) {
+        String status = studentItems.get(position).getStatus();
+        if (status.equals("P")) status = "A";
+        else status = "P";
+
+        studentItems.get(position).setStatus(status);
+        addapter.notifyItemChanged(position);
     }
 
     private void setToolbar() {
