@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
         fab = findViewById(R.id.fab_btn);
         fab.setOnClickListener(v-> showDialog());
 
-        recyclerView = findViewById(R.id.recycleview);
+        recyclerView = findViewById(R.id.recyclerview);
         recyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);

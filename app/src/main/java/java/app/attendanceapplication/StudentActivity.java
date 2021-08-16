@@ -85,7 +85,7 @@ public class StudentActivity extends AppCompatActivity {
 
     private void addStudent(String roll, String name) {
         studentItems.add(new StudentItem(roll, name) );
-        addapter.notifyItemChanged(studentItems.size()-1);
+        addapter.notifyDataSetChanged();
     }
 
 }
