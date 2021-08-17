@@ -1,6 +1,8 @@
 package java.app.attendanceapplication;
 
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -13,13 +15,13 @@ public class DbHelper extends SQLiteOpenHelper {
 
     //Creating table for Class Name
     private static final String CLASS_TABLE_NAME =  "CLASS_TABLE";
-    private static final String C_ID =  "_CID";
-    private static final String CLASS_NAME_KEY =  "CLASS_NAME";
-    private static final String COURSE_NAME_KEY =  "COURSE_NAME";
+    public static final String C_ID =  "_CID";
+    public static final String CLASS_NAME_KEY =  "CLASS_NAME";
+    public static final String COURSE_NAME_KEY =  "COURSE_NAME";
 
     private static final String CREATE_CLASS_TABLE =
             "CREATE TABLE " + CLASS_TABLE_NAME + "(" +
-            C_ID + "INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
+            C_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
             CLASS_NAME_KEY + " TEXT NOT NULL," +
             COURSE_NAME_KEY + " TEXT NOT NULL," +
             "UNIQUE (" + CLASS_NAME_KEY + "," + COURSE_NAME_KEY + ")" +
@@ -35,7 +37,7 @@ public class DbHelper extends SQLiteOpenHelper {
 
     private static final String CREATE_STUDENT_TABLE =
             "CREATE TABLE " + STUDENT_TABLE_NAME + "(" +
-                    S_ID + "INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
+                    S_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
                     C_ID + " INTEGER NOT NULL, "+
                     STUDENT_NAME_KEY + " TEXT NOT NULL, " +
                     STUDENT_ROLL_KEY + " INTEGER, " +
@@ -46,7 +48,7 @@ public class DbHelper extends SQLiteOpenHelper {
     private static final String SELECT_STUDENT_TABLE = "SELECT * FROM " + STUDENT_TABLE_NAME;
 
     //Creating Status table
-    private static final String STATUS_TABLE_NAME =  "STATUS_TABLE";
+    private static final String STATUS_TABLE_NAME =  " STATUS_TABLE";
     private static final String STATUS_ID =  "_STATUS_ID";
     private static final String DATE_KEY =  "STATUS_DATE";
     private static final String STATUS_KEY =  "STATUS";
@@ -54,7 +56,7 @@ public class DbHelper extends SQLiteOpenHelper {
     private static final String CREATE_STATUS_TABLE =
             "CREATE TABLE " +STATUS_TABLE_NAME +
                     "(" +
-                    STATUS_ID + "INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
+                    STATUS_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
                     S_ID + " INTEGER NOT NULL, "+
                     DATE_KEY + " DATE NOT NULL, " +
                     STATUS_KEY + "TEXT NOT NULL, " +
@@ -70,7 +72,6 @@ public class DbHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-
         db.execSQL(CREATE_CLASS_TABLE);
         db.execSQL(CREATE_STUDENT_TABLE);
         db.execSQL(CREATE_STATUS_TABLE);
@@ -88,5 +89,31 @@ public class DbHelper extends SQLiteOpenHelper {
 
 
     }
+    long addClass(String className,String courseName){
+     SQLiteDatabase database = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(CLASS_NAME_KEY,className);
+        values.put(COURSE_NAME_KEY,courseName);
 
+        return database.insert(CLASS_TABLE_NAME,null,values);
+   }
+
+   Cursor getClassTable(){
+       SQLiteDatabase database = this.getReadableDatabase();
+
+       return database.rawQuery(SELECT_CLASS_TABLE,null);
+
+   }
+   int deleteClass(long cid){
+        SQLiteDatabase database = this.getReadableDatabase();
+       return database.delete(CLASS_TABLE_NAME,C_ID+"=?",new String[]{String.valueOf(cid)});
+   }
+    long updateClass(long cid,String className,String courseName){
+        SQLiteDatabase database = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(CLASS_NAME_KEY,className);
+        values.put(COURSE_NAME_KEY,courseName);
+
+        return database.update(CLASS_TABLE_NAME,values,C_ID+"=?",new String[]{String.valueOf(cid)});
+    }
 }

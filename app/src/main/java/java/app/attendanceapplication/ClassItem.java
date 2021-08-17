@@ -1,6 +1,14 @@
 package java.app.attendanceapplication;
 
 public class ClassItem {
+    private  long cid;
+
+    public ClassItem(long cid, String className, String courseName) {
+        this.cid = cid;
+        this.className = className;
+        this.courseName = courseName;
+    }
+
     private String className;
 
     public String getClassName() {
@@ -24,5 +32,13 @@ public class ClassItem {
     public ClassItem(String className, String courseName) {
         this.className = className;
         this.courseName = courseName;
+    }
+
+    public long getCid() {
+        return cid;
+    }
+
+    public void setCid(int cid) {
+        this.cid = cid;
     }
 }
