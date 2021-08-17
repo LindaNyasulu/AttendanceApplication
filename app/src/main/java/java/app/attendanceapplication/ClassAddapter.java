@@ -43,7 +43,7 @@ TextView courseName;
         @Override
         public void onCreateContextMenu(ContextMenu menu, View view, ContextMenu.ContextMenuInfo contextMenuInfo) {
             menu.add(getAdapterPosition(),0,0,"EDIT");
-            menu.add(getAdapterPosition(),0,0,"DELETE");
+            menu.add(getAdapterPosition(),1,0,"DELETE");
 
         }
     }
