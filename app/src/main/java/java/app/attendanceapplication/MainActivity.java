@@ -83,6 +83,7 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtra("className",classItems.get(position).getClassName());
         intent.putExtra("courseName",classItems.get(position).getCourseName());
         intent.putExtra("position",position);
+        intent.putExtra("cid",classItems.get(position).getCid());
         startActivity(intent);
     }
 
