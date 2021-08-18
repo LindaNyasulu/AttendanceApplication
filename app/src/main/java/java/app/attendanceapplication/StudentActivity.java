@@ -52,6 +52,7 @@ public class StudentActivity extends AppCompatActivity {
         addapter=new StudentAddapter(this,studentItems);
         recyclerView.setAdapter(addapter);
         addapter.setOnItemClickListener(position1 ->changeStatus(position));
+        loadStatusData();
     }
 
     private void loadData() {
@@ -82,6 +83,7 @@ public class StudentActivity extends AppCompatActivity {
         coursetitle = toolbar.findViewById(R.id.subtitle_toolbar);
         ImageButton back = toolbar.findViewById(R.id.back);
         ImageButton save = toolbar.findViewById(R.id.save);
+        save.setOnClickListener(v->saveStatus());
 
         title.setText(className);
         coursetitle.setText(courseName+"   "+calender.getDate());
@@ -92,6 +94,23 @@ public class StudentActivity extends AppCompatActivity {
 
     }
 
+    private void saveStatus() {
+        for(StudentItem studentItem : studentItems){
+            String status = studentItem.getStatus();
+            if (status != "P") status = "A";
+            long value = dbHelper.addStatus(studentItem.getSid(),calender.getDate(),status);
+
+            if (value == -1)dbHelper.updateStatus(studentItem.getSid(),calender.getDate(),status);
+        }
+    }
+    private void loadStatusData(){
+        for(StudentItem studentItem : studentItems){
+            String status = dbHelper.getStatus(studentItem.getSid(),calender.getDate());
+            if (status != null) studentItem.setStatus(status);
+            else studentItem.setStatus("");
+        }
+        addapter.notifyDataSetChanged();
+    }
     private boolean onMenuItemCick(MenuItem menuItem) {
         if (menuItem.getItemId()==R.id.add_student){
             showAddStudentDialog();
@@ -111,6 +130,7 @@ public class StudentActivity extends AppCompatActivity {
     private void onCalenderOkClicked(int year, int month, int day) {
         calender.setDate(year, month, day);
         coursetitle.setText(courseName+"  "+calender.getDate());
+        loadStatusData();
     }
 
     private void showAddStudentDialog() {
