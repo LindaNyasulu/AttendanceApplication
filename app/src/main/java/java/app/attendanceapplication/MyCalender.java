@@ -15,7 +15,7 @@ public class MyCalender extends DialogFragment {
     Calendar calendar = Calendar.getInstance();
 
 
-public   interface OnCalenderOkClickListener{
+public   interface OnCalenderOkClickListener {
    void onClick(int year,int month,int day);
 }
 public OnCalenderOkClickListener onCalenderOkClickListener;
