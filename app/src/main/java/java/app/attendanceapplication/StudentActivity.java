@@ -28,16 +28,20 @@ public class StudentActivity extends AppCompatActivity {
     private ArrayList<StudentItem> studentItems  =  new ArrayList<>();
     private DbHelper dbHelper;
     private int cid;
+    private MyCalender calender;
+    private TextView coursetitle;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_student);
+        calender = new MyCalender();
         dbHelper = new DbHelper(this);
         Intent intent = getIntent();
         className =  intent.getStringExtra("className");
         courseName = intent.getStringExtra("courseName");
         position = intent.getIntExtra("position",-1);
         cid = intent.getIntExtra("cid",-1);
+
 
         setToolbar();
         loadData();
@@ -75,12 +79,12 @@ public class StudentActivity extends AppCompatActivity {
 
         toolbar = findViewById(R.id.toolbar);
         TextView title = toolbar.findViewById(R.id.title_toolbar);
-        TextView coursetitle = toolbar.findViewById(R.id.subtitle_toolbar);
+        coursetitle = toolbar.findViewById(R.id.subtitle_toolbar);
         ImageButton back = toolbar.findViewById(R.id.back);
         ImageButton save = toolbar.findViewById(R.id.save);
 
         title.setText(className);
-        coursetitle.setText(courseName);
+        coursetitle.setText(courseName+"   "+calender.getDate());
 
         back.setOnClickListener(v->onBackPressed());
         toolbar.inflateMenu(R.menu.student_menu);
@@ -92,7 +96,21 @@ public class StudentActivity extends AppCompatActivity {
         if (menuItem.getItemId()==R.id.add_student){
             showAddStudentDialog();
         }
+         else if (menuItem.getItemId()==R.id.show_calender){
+            showCalender();
+        }
         return true;
+    }
+
+    private void showCalender() {
+
+        calender.show(getSupportFragmentManager(),"");
+        calender.setOnCalenderOkClickListener(this::onCalenderOkClicked);
+    }
+
+    private void onCalenderOkClicked(int year, int month, int day) {
+        calender.setDate(year, month, day);
+        coursetitle.setText(courseName+"  "+calender.getDate());
     }
 
     private void showAddStudentDialog() {
