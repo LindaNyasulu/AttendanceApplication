@@ -51,7 +51,7 @@ public class StudentActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(layoutManager);
         addapter=new StudentAddapter(this,studentItems);
         recyclerView.setAdapter(addapter);
-        addapter.setOnItemClickListener(position1 ->changeStatus(position));
+        addapter.setOnItemClickListener(position->changeStatus(position));
         loadStatusData();
     }
 
@@ -69,7 +69,9 @@ public class StudentActivity extends AppCompatActivity {
 
     private void changeStatus(int position) {
         String status = studentItems.get(position).getStatus();
-        if (status.equals("P")) status = "A";
+        if (status.equals("P")){
+            status = "A";
+        }
         else status = "P";
 
         studentItems.get(position).setStatus(status);
@@ -86,7 +88,7 @@ public class StudentActivity extends AppCompatActivity {
         save.setOnClickListener(v->saveStatus());
 
         title.setText(className);
-        coursetitle.setText(courseName+"   "+calender.getDate());
+        coursetitle.setText(courseName+" |  "+calender.getDate());
 
         back.setOnClickListener(v->onBackPressed());
         toolbar.inflateMenu(R.menu.student_menu);
@@ -98,7 +100,7 @@ public class StudentActivity extends AppCompatActivity {
         for(StudentItem studentItem : studentItems){
             String status = studentItem.getStatus();
             if (status != "P") status = "A";
-            long value = dbHelper.addStatus(studentItem.getSid(),calender.getDate(),status);
+            long value = dbHelper.addStatus(studentItem.getSid(),cid,calender.getDate(),status);
 
             if (value == -1)dbHelper.updateStatus(studentItem.getSid(),calender.getDate(),status);
         }
@@ -118,7 +120,30 @@ public class StudentActivity extends AppCompatActivity {
          else if (menuItem.getItemId()==R.id.show_calender){
             showCalender();
         }
+        else if (menuItem.getItemId()==R.id.show_attendance_sheet){
+            openSheetList();
+        }
         return true;
+    }
+
+    private void openSheetList() {
+        long[] idArray = new long[studentItems.size()];
+        String[] nameArray = new String[studentItems.size()];
+        int[] rollArray = new int[studentItems.size()];
+        for (int i = 0; i<idArray.length;i++)
+            idArray[i] = studentItems.get(i).getSid();
+        for (int i =0 ; i<rollArray.length;i++)
+            rollArray[i] = studentItems.get(i).getRoll();
+        for (int i =0 ; i<nameArray.length;i++)
+            nameArray[i] = studentItems.get(i).getName();
+
+
+        Intent intent = new Intent(this,SheetListActivity.class);
+        intent.putExtra("cid",cid);
+        intent.putExtra("idArray",idArray);
+        intent.putExtra("rollArray",rollArray);
+       intent.putExtra("nameArray",nameArray);
+        startActivity(intent);
     }
 
     private void showCalender() {
