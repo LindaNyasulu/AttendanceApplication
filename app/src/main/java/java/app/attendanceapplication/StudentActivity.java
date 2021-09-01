@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -103,6 +104,7 @@ public class StudentActivity extends AppCompatActivity {
             long value = dbHelper.addStatus(studentItem.getSid(),cid,calender.getDate(),status);
 
             if (value == -1)dbHelper.updateStatus(studentItem.getSid(),calender.getDate(),status);
+            Toast.makeText(this, "Names Saved Successfully", Toast.LENGTH_SHORT).show();
         }
     }
     private void loadStatusData(){
